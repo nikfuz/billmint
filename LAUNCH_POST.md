@@ -47,7 +47,7 @@ Use code **LAUNCH50** at checkout for **50% off [first month / first 3 months: s
 
 I'd really like feedback, especially on what your invoices need that BillMint doesn't do yet. Reply here or email me at [your email].
 
-: Nicola
+Nicola
 
 ---
 
