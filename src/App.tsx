@@ -7,6 +7,7 @@ import { Editor } from './pages/Editor';
 import { SettingsPage } from './pages/Settings';
 import { ClientsPage } from './pages/Clients';
 import { UpgradeSuccess } from './pages/UpgradeSuccess';
+import { UpgradeUnverified } from './pages/UpgradeUnverified';
 import { AppShell, MarketingShell } from './components/Shell';
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
 
   if (path === '/' || path === '') return <MarketingShell><Landing /></MarketingShell>;
   if (path === '/pricing') return <MarketingShell><PricingPage /></MarketingShell>;
+  if (path === '/upgrade/unverified') return <MarketingShell><UpgradeUnverified /></MarketingShell>;
   if (path === '/upgrade/success') return <MarketingShell><UpgradeSuccess /></MarketingShell>;
   if (path === '/app') return <AppShell active="docs"><Dashboard /></AppShell>;
   if (path === '/app/new') return <AppShell active="docs" wide><Editor key={route} kind={q.get('kind') === 'quote' ? 'quote' : 'invoice'} /></AppShell>;

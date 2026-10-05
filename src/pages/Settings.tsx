@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import type { Currency, Party, Settings, TemplateId } from '../lib/types';
 import { CURRENCIES, DEFAULT_BRAND, TEMPLATES } from '../lib/types';
-import { store, useStoreVersion } from '../lib/storage';
+import { store, useStoreVersion, DEMO_BILLING } from '../lib/storage';
 import { usePro } from '../lib/pro';
 import { fileToPngDataUrl } from '../lib/image';
 import { downloadText } from '../lib/csv';
@@ -50,7 +50,7 @@ export function SettingsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="text-[15px] text-ink-500">
               {isPro ? 'Unlimited documents, no watermark, custom branding, all templates, clients & CSV export.' : 'Free: 3 documents / month, watermark, Mint template.'}
-              <p className="text-[13px] mt-1">Demo mode toggle sets <code className="font-mono">localStorage.billmint_pro</code>. {hasRealCheckout() ? 'Live checkout is configured.' : 'No checkout configured yet — see README.'}</p>
+              {DEMO_BILLING && <p className="text-[13px] mt-1">Dev build: demo toggle sets <code className="font-mono">localStorage.billmint_pro</code>. {hasRealCheckout() ? 'Live checkout is configured.' : 'No checkout configured yet — see README.'}</p>}
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <ProToggle />

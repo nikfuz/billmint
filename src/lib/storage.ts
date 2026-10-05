@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import type { BillDoc, Client, Settings } from './types';
 import { DEFAULT_BRAND, FREE_MONTHLY_LIMIT } from './types';
 
+/** Demo billing (Pro toggle, 'Activate Pro (demo)') exists only in `vite dev`, never in production builds. */
+export const DEMO_BILLING = import.meta.env.DEV;
+
 const K = {
   docs: 'billmint_docs',
   settings: 'billmint_settings',
@@ -39,11 +42,18 @@ export const defaultSettings: Settings = {
 };
 
 export const store = {
-  // Pro flag (demo + post-checkout)
-  isPro: () => localStorage.getItem(K.pro) === 'true',
-  setPro: (v: boolean) => {
-    if (v) localStorage.setItem(K.pro, 'true');
-    else localStorage.removeItem(K.pro);
+  // Pro flag. Value 'paid' is written only by the post-checkout handler (src/lib/billing.ts).
+  // 'demo' / legacy 'true' come from the demo toggle and are honoured ONLY in dev builds,
+  // so stale demo unlocks from earlier builds do not grant Pro in production.
+  isPro: () => {
+    const v = localStorage.getItem(K.pro);
+    return v === 'paid' || (DEMO_BILLING && (v === 'demo' || v === 'true'));
+  },
+  setPro: (v: boolean, source: 'paid' | 'demo' = 'demo') => {
+    if (v) {
+      if (source === 'demo' && !DEMO_BILLING) return; // demo unlock disabled in production
+      localStorage.setItem(K.pro, source);
+    } else localStorage.removeItem(K.pro);
     window.dispatchEvent(new CustomEvent('billmint:change', { detail: K.pro }));
   },
 
@@ -88,8 +98,11 @@ export const store = {
     clients: store.clients(),
     exportedAt: new Date().toISOString(),
   }),
+  // Erases documents, settings and clients. Keeps the free-tier usage log (so "erase" isn't a
+  // way around the monthly limit) and a paid Pro flag (so paying users don't lose Pro).
   resetAll: () => {
-    Object.values(K).forEach((k) => localStorage.removeItem(k));
+    [K.docs, K.settings, K.clients].forEach((k) => localStorage.removeItem(k));
+    if (localStorage.getItem(K.pro) !== 'paid') localStorage.removeItem(K.pro);
     window.dispatchEvent(new CustomEvent('billmint:change', { detail: '*' }));
   },
 };

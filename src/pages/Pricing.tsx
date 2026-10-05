@@ -1,5 +1,6 @@
 import { PricingCards } from '../components/PricingCards';
 import { ProToggle } from '../components/Shell';
+import { DEMO_BILLING } from '../lib/storage';
 
 const FAQ = [
   ['What counts toward the free limit?', 'Every new invoice or quote you create (including duplicates). The counter resets on the 1st of each month. Deleting a document doesn\u2019t refund it.'],
@@ -15,9 +16,11 @@ export function PricingPage() {
         <p className="text-[12px] font-bold tracking-[0.2em] uppercase text-mint-700">Pricing</p>
         <h1 className="font-display text-5xl md:text-6xl mt-3 leading-[1.05]">One invoice paid on time<br /><em className="text-mint-700">pays for a year.</em></h1>
         <p className="text-ink-500 mt-5 text-lg max-w-xl mx-auto">Start free. Upgrade when you're ready to look like the premium studio you are.</p>
-        <div className="mt-6 inline-flex items-center gap-3 rounded-full bg-white/70 border border-paper-200 px-4 py-2 text-[13px] text-ink-500">
-          Trying it out? Flip the demo switch → <ProToggle compact />
-        </div>
+        {DEMO_BILLING && (
+          <div className="mt-6 inline-flex items-center gap-3 rounded-full bg-white/70 border border-paper-200 px-4 py-2 text-[13px] text-ink-500">
+            Dev build: flip the demo switch → <ProToggle compact />
+          </div>
+        )}
       </section>
       <section className="px-5 pb-20"><PricingCards /></section>
       <section className="max-w-3xl mx-auto px-5 pb-24">

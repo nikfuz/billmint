@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { usePro } from '../lib/pro';
+import { DEMO_BILLING } from '../lib/storage';
 import { File, Leaf, Menu, Settings, Sparkle, Users, X } from './Icons';
 
 export function Wordmark({ dark = false }: { dark?: boolean }) {
@@ -13,7 +14,13 @@ export function Wordmark({ dark = false }: { dark?: boolean }) {
   );
 }
 
+/** Dev-only demo switch. Renders nothing in production builds. */
 export function ProToggle({ compact = false }: { compact?: boolean }) {
+  if (!DEMO_BILLING) return null;
+  return <ProToggleInner compact={compact} />;
+}
+
+function ProToggleInner({ compact }: { compact: boolean }) {
   const { isPro, setPro } = usePro();
   return (
     <label className={`inline-flex items-center gap-2 cursor-pointer select-none ${compact ? 'text-[12px]' : 'text-[13px]'} font-semibold text-ink-500`} title="Demo toggle — sets localStorage billmint_pro">

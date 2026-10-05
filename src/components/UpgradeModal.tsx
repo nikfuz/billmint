@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ProFeature } from '../lib/pro';
-import { store } from '../lib/storage';
+import { store, DEMO_BILLING } from '../lib/storage';
 import { startCheckout, hasRealCheckout, billing } from '../lib/billing';
 import { FREE_MONTHLY_LIMIT, PRO_PRICE } from '../lib/types';
 import { Check, Sparkle, X } from './Icons';
@@ -33,11 +33,14 @@ export function UpgradeModal({ feature, onClose }: { feature: ProFeature; onClos
     setBusy(true);
     const r = await startCheckout();
     setBusy(false);
-    if (r === 'demo') setDemoMsg('Checkout isn\u2019t connected yet (no Stripe/Gumroad env vars). Use the demo toggle below.');
+    if (r === 'unavailable')
+      setDemoMsg(DEMO_BILLING
+        ? 'Dev build: no checkout configured (VITE_STRIPE_PAYMENT_LINK is empty). Use the demo button below.'
+        : 'Pro checkout opens very soon. The free plan stays fully usable in the meantime.');
     if (r === 'error') setDemoMsg('Checkout failed to start. Please try again.');
   };
   const activateDemo = () => {
-    store.setPro(true);
+    store.setPro(true, 'demo'); // no-op in production builds
     onClose();
   };
 
@@ -66,13 +69,15 @@ export function UpgradeModal({ feature, onClose }: { feature: ProFeature; onClos
             {busy ? 'Opening checkout…' : `Upgrade to Pro — $${PRO_PRICE}/mo`}
           </button>
           {demoMsg && <p className="mt-3 text-[13px] text-tang bg-tang-100/60 rounded-xl px-3 py-2">{demoMsg}</p>}
+          {DEMO_BILLING && (
           <div className="mt-5 pt-4 border-t border-paper-300 flex items-center justify-between gap-3">
             <div className="text-[12px] text-ink-500 leading-snug">
-              <b className="text-ink-700">Demo mode</b> — sets <code className="font-mono text-[11px]">billmint_pro=true</code>
+              <b className="text-ink-700">Dev-only demo</b> — sets <code className="font-mono text-[11px]">billmint_pro=true</code>
               {!hasRealCheckout() && <span className="block">Price ID: <code className="font-mono text-[11px]">{billing.priceId}</code></span>}
             </div>
             <button onClick={activateDemo} className="btn-ghost text-[13px] whitespace-nowrap">Activate Pro (demo)</button>
           </div>
+          )}
         </div>
       </div>
     </div>

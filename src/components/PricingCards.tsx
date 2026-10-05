@@ -1,5 +1,5 @@
 import { usePro } from '../lib/pro';
-import { startCheckout } from '../lib/billing';
+import { startCheckout, hasRealCheckout } from '../lib/billing';
 import { FREE_MONTHLY_LIMIT, PRO_PRICE } from '../lib/types';
 import { Check, Sparkle, X } from './Icons';
 
@@ -52,7 +52,7 @@ export function PricingCards() {
         ) : (
           <button onClick={upgrade} className="btn-primary justify-center mt-8 py-3 relative">Upgrade to Pro</button>
         )}
-        <p className="text-center text-[12px] text-paper/50 mt-3 relative">Cancel anytime · Secure checkout by Stripe</p>
+        <p className="text-center text-[12px] text-paper/50 mt-3 relative">{hasRealCheckout() ? 'Cancel anytime · Secure checkout by Stripe' : 'Pro checkout opens soon · Free plan available now'}</p>
       </div>
     </div>
   );
