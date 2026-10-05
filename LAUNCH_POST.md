@@ -6,6 +6,8 @@
 > - **Before Stripe:** delete the "Launch offer" section and post it as a free tool.
 > - **After Stripe:** create the `LAUNCH50` promo code in Stripe (Payment Link → "Allow promotion codes" on), fill in the `[…]` terms, and keep the section.
 >
+> Recommended `LAUNCH50` terms (see `BUSINESS_PROGRAM.md` §3): **50% off the first 3 months**, expires **14 days after public launch day**, max 100 redemptions. When and where to post this: `MARKETING_CAMPAIGNS.md` (Campaign D).
+>
 > No revenue or user numbers here, on purpose. Don't add any until they're real.
 
 ---
